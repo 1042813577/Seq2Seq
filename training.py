@@ -9,14 +9,17 @@ def train(params):
     assert params["mode"].lower() == "train", "change training mode to 'train'"
 
     vocab = Vocab(params["vocab_path"], params["vocab_size"])
-    b = batcher(vocab, params)  # 下次PGN详细讲，仅仅是将数据封装成tf特定的格式
+    print('true vocab is ', vocab)
+
+    print("Creating the batcher ...")
+    b = batcher(vocab, params) #下次PGN详细讲，仅仅是将数据封装成tf特定的格式
     print("Building the model ...")
     if params["model"] == "SequenceToSequence":
-        model = SequenceToSequence(params,vocab)
+        model = SequenceToSequence(params)
     # elif params["model"] == "PGN":
     #     model = PGN(params)
 
-    # print("Creating the checkpoint manager")
+    print("Creating the checkpoint manager")
     if params["model"] == "SequenceToSequence":
         checkpoint_dir = "{}/checkpoint".format(params["seq2seq_model_dir"])
         ckpt = tf.train.Checkpoint(step=tf.Variable(0), SequenceToSequence=model)

@@ -3,16 +3,14 @@ import time
 from models.losses import loss_function
 import  numpy as np
 
-
 def train_model(model, dataset, params, ckpt_manager,vocab):
+    print(vocab)
     start_index = vocab.word_to_id('[START]')
     pad_index = vocab.word_to_id('[PAD]')
 
     optimizer = tf.keras.optimizers.Adam(name='Adam', learning_rate=params["learning_rate"])
     # @tf.function()
-
-
-    def train_step(enc_inp, dec_tar, pad_index):
+    def train_step(enc_inp, dec_tar,pad_index):
         with tf.GradientTape() as tape:
             # print('enc_inp shape is final for model :', enc_inp.get_shape())
             enc_output, enc_hidden = model.encoder(enc_inp)
@@ -36,9 +34,9 @@ def train_model(model, dataset, params, ckpt_manager,vocab):
         total_loss = 0
         # print(len(dataset.take(params['steps_per_epoch'])))
         for step, batch in enumerate(dataset.take(params['steps_per_epoch'])):
-            # 讲设你的样本数是1000，batch size10,一个epoch，我们一共有100次，200， 500， 40，20.
+            #讲设你的样本数是1000，batch size10,一个epoch，我们一共有100次，200， 500， 40，20.
             batch_loss = train_step(batch[0]["enc_input"],  # shape=(16, 200)
-                              batch[1]["dec_target"], pad_index)  # shape=(16, 50)
+                              batch[1]["dec_target"],pad_index)  # shape=(16, 50)
             total_loss += batch_loss
             step += 1
             if step % 100 == 0:

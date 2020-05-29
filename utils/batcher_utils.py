@@ -13,7 +13,6 @@ class Vocab:
     def __init__(self, vocab_file, max_size):
         self.word2id = {UNKNOWN_TOKEN: 0, PAD_TOKEN: 1, START_DECODING: 2, STOP_DECODING: 3}
         self.id2word = {0: UNKNOWN_TOKEN, 1: PAD_TOKEN, 2: START_DECODING, 3: STOP_DECODING}
-        self.id2embed = {0: [1, 0, 0, 0, 0], 1: [0, 1, 0, 0, 0], 2: [0, 0, 1, 0, 0], 3: [0, 0, 0, 1, 0]}
         self.count = 4
 
         with open(vocab_file, 'r', encoding='utf-8') as f:
@@ -38,11 +37,7 @@ class Vocab:
                     print("max_size of vocab was specified as %i; we now have %i words. Stopping reading."
                           % (max_size, self.count))
                     break
-        with open('data/w2v_embed.txt', 'r', encoding='utf-8') as f:
-            for line in f:
-                index = int(line.split(' ')[0])
-                vector = line.split(' ')[1:]
-                self.id2embed[index+4] = vector
+
         print("Finished constructing vocabulary of %i total words. Last word added: %s" %
               (self.count, self.id2word[self.count - 1]))
 
@@ -50,9 +45,6 @@ class Vocab:
         if word not in self.word2id:
             return self.word2id[UNKNOWN_TOKEN]
         return self.word2id[word]
-
-    def id_to_embed(self, id):
-        return self.id2embed[id]
 
     def id_to_word(self, word_id):
         if word_id not in self.id2word:
