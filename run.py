@@ -16,7 +16,7 @@ def main():
     # parser.add_argument("--beam_size", default=3,
     #                     help="beam size for beam search decoding (must be equal to batch size in decode mode)",
     #                     type=int)
-    parser.add_argument("--batch_size", default=3, help="batch size", type=int)
+    parser.add_argument("--batch_size", default=16, help="batch size", type=int)
     parser.add_argument("--word2vec_path", default="data/w2v_embed.txt", type=str)
     parser.add_argument("--vocab_size", default=1059, help="Vocabulary size", type=int)
     parser.add_argument("--embed_size", default=256, help="Words embeddings dimension", type=int)
@@ -63,7 +63,9 @@ def main():
     gpus = tf.config.experimental.list_physical_devices(device_type='GPU')
     if gpus:
         tf.config.experimental.set_visible_devices(devices=gpus[0], device_type='GPU')
-
+        # 设置gpu内存自增长
+        for gpu in gpus:
+            tf.config.experimental.set_memory_growth(gpu, True)
     if params["mode"] == "train":
         training.train(params)
 
