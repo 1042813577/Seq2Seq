@@ -1,9 +1,10 @@
 import tensorflow as tf
-from models.Seq2Seq import SequenceToSequence
-from utils.batcher_utils import Vocab, batcher
+from models.seq2seq import SequenceToSequence
+from utils.batcher import Vocab, batcher
 from utils.test_helper import batch_greedy_decode
 from tqdm import tqdm
 import  pandas  as pd
+
 
 def test(params):
     global model, ckpt, checkpoint_dir
@@ -29,6 +30,7 @@ def test(params):
     print("Model restored")
     for batch in b:
         yield batch_greedy_decode(model, batch, vocab, params)
+
 
 def test_and_save(params):
     assert params["test_save_dir"], "provide a dir where to save the results"
